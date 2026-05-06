@@ -1,0 +1,28 @@
+{
+  "repo": "cobalt-rel-restore-grid",
+  "language": "Solidity",
+  "category": "Reliability",
+  "goal": "Develop a Solidity command-oriented project for restore scenarios with transition tables, invalid-transition tests, and local-only command execution.",
+  "weights": {
+    "signal": 2,
+    "slack": 2,
+    "confidence": 2,
+    "drag": 2
+  },
+  "thresholds": {
+    "ship": 196,
+    "watch": 98
+  },
+  "properties": [
+    "raising signal cannot reduce score",
+    "raising drag cannot improve score",
+    "lane labels must match configured thresholds",
+    "golden fixture ids must remain unique"
+  ],
+  "fixture_files": [
+    "fixtures/golden/scoreboard.csv",
+    "fixtures/golden/lane-matrix.csv",
+    "fixtures/fuzz/mutations.csv",
+    "fixtures/fuzz/boundary-cases.jsonl"
+  ]
+}

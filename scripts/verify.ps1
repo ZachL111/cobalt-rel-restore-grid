@@ -61,3 +61,9 @@ foreach ($pathPattern in $knownPaths) {
 forge test
 
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-cobalt-rel-restore-detail.ps1
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-cobalt-rel-restore-properties.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-cobalt-rel-restore-golden.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
