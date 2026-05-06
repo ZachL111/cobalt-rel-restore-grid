@@ -1,0 +1,32 @@
+{
+  "index": 303,
+  "phase": 2,
+  "batch": 34,
+  "name": "cobalt-rel-restore-grid",
+  "planned_name": "cobalt-rel-restore-grid",
+  "language": "Solidity",
+  "category": "Reliability",
+  "goal": "Develop a Solidity command-oriented project for restore scenarios with transition tables, invalid-transition tests, and local-only command execution.",
+  "repository_url": "https://github.com/ZachL111/cobalt-rel-restore-grid",
+  "verification_command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1",
+  "model": {
+    "inputs": [
+      "demand",
+      "capacity",
+      "latency",
+      "risk",
+      "weight"
+    ],
+    "threshold": 168,
+    "risk_penalty": 6,
+    "latency_penalty": 2,
+    "weight_bonus": 2,
+    "decision_rule": "accept when score is greater than or equal to threshold, otherwise review"
+  },
+  "quality_gates": [
+    "readme constraint scan",
+    "fixture presence check",
+    "metadata JSON parse",
+    "language verifier"
+  ]
+}

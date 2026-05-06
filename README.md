@@ -1,43 +1,69 @@
 # cobalt-rel-restore-grid
 
-cobalt-rel-restore-grid is a Solidity project for reliability. It focuses on this technical goal: Develop a Solidity command-oriented project for restore scenarios with transition tables, invalid-transition tests, and local-only command execution.
+`cobalt-rel-restore-grid` packages a practical reliability exercise in Solidity. The emphasis is on deterministic behavior, a small public API, and examples that explain the tradeoffs.
 
-## Why it exists
+## How I Read Cobalt Rel Restore Grid
 
-Small engineering tools are easiest to trust when their rules are explicit, testable, and cheap to run locally. This repository packages a focused model with fixture data and a local verification path so behavior can be reviewed without external services.
+The useful thing to inspect here is how the same score rule is represented in code, metadata, and examples. If those three pieces disagree, the audit script should make the drift visible.
 
-## Features
+## Problem Shape
 
-- Deterministic policy scoring over fixture scenarios.
-- Clear accept or review decisions based on a documented threshold.
-- A command-line or local test path for quick validation.
-- Golden fixture data for repeatable checks.
-- Minimal dependencies and a compact project layout.
+This project keeps the domain idea close to the tests. That makes it useful as a reference implementation, a small experiment, or a starting point for a more specialized tool.
 
-## Architecture Notes
+## Scenario Walkthrough
 
-The core module exposes a small scoring API. Inputs are simple numeric signals: demand, capacity, latency, risk, and weight. The score uses a threshold of 168, risk penalty 6, latency penalty 2, and weight bonus 2. Tests exercise the public API against the fixture cases in `fixtures/cases.csv`.
+`degraded` is the first example I would inspect because it lands on the `review` path with a score of -19. The broader file also keeps `degraded` at -19 and `surge` at 203, which gives the model a useful low-to-high spread.
 
-## Setup
+## Internal Model
 
-Install the Solidity toolchain and run commands from the repository root.
+The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps failure windows, retry budgets, and runbook checks in one explicit decision path. The threshold is 168, with risk penalty 6, latency penalty 2, and weight bonus 2. The Solidity project uses Foundry tests and pure contract functions so invariants are cheap to exercise.
 
-## Usage
+## Main Behaviors
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
-```
+- Models failure windows with deterministic scoring and explicit review decisions.
+- Uses fixture data to keep retry budgets changes visible in code review.
+- Includes extended examples for runbook checks, including `surge` and `degraded`.
+- Documents recovery paths tradeoffs in `docs/operations.md`.
+- Runs locally with a single verification command and no external credentials.
 
-The verification script builds or runs the project and checks the fixture decisions.
-
-## Tests
+## How To Run It
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-## Limitations And Roadmap
+This runs the language-level build or test path against the compact fixture set.
 
-- The fixture set is intentionally small so it can be audited by hand.
-- Future work could add richer domain-specific input adapters.
-- The model is a local demonstration and does not claim production use.
+## Validation
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
+```
+
+The audit command checks repository structure and README constraints before it delegates to the verifier.
+
+## Repository Map
+
+- `src`: primary implementation
+- `test`: language test directory
+- `fixtures`: compact golden scenarios
+- `examples`: expanded scenario set
+- `metadata`: project constants and verification metadata
+- `docs`: operations and extension notes
+- `scripts`: local verification and audit commands
+- `foundry.toml`: Foundry project configuration
+
+## Follow-Up Work
+
+- Split the scoring constants into a typed configuration object and validate it before use.
+- Add a comparison mode that shows how decisions change when one signal is adjusted.
+- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
+- Add one more reliability fixture that focuses on a malformed or borderline input.
+
+## Known Edges
+
+The scoring model is simple by design. More domain-specific behavior should be added through explicit adapters or extra fixture classes rather than hidden constants.
+
+## Run It Locally
+
+Use a normal shell with Solidity available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
