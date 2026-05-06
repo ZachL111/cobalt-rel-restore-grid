@@ -1,0 +1,73 @@
+{
+  "repo": "cobalt-rel-restore-grid",
+  "language": "Solidity",
+  "category": "Reliability",
+  "goal": "Develop a Solidity command-oriented project for restore scenarios with transition tables, invalid-transition tests, and local-only command execution.",
+  "review_model": {
+    "terms": [
+      "budget pressure",
+      "failure width",
+      "recovery gap",
+      "runbook drift"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "budget pressure",
+      "signal": 54,
+      "slack": 43,
+      "drag": 9,
+      "confidence": 72,
+      "score": 196,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "failure width",
+      "signal": 75,
+      "slack": 23,
+      "drag": 12,
+      "confidence": 76,
+      "score": 213,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "recovery gap",
+      "signal": 65,
+      "slack": 37,
+      "drag": 28,
+      "confidence": 90,
+      "score": 173,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "runbook drift",
+      "signal": 61,
+      "slack": 47,
+      "drag": 20,
+      "confidence": 93,
+      "score": 202,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "budget pressure",
+      "signal": 89,
+      "slack": 47,
+      "drag": 16,
+      "confidence": 69,
+      "score": 246,
+      "lane": "ship"
+    }
+  ]
+}
